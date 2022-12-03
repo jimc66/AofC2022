@@ -1,0 +1,1 @@
+/Users/jcuff/Documents/source/test_rust/test_hello/target/debug/test_hello: /Users/jcuff/Documents/source/test_rust/test_hello/src/day2.rs /Users/jcuff/Documents/source/test_rust/test_hello/src/main.rs
