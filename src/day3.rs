@@ -1,28 +1,62 @@
 use std::fs;
-use substring::Substring;
+
 
 pub fn day3 () {
-//   const FNAME : &str = "./files/day2.txt" ;
- const FNAME : &str = "./files/test3.txt" ;
+   const FNAME : &str = "./files/day3.txt" ;
+// const FNAME : &str = "./files/test3.txt" ;
     let mut sum_prio: i64 = 0;
     let mut first_half_val: i64 = 0;
     let mut second_half_val: i64 = 0;
-
+    let UPPER_A = 65;
+    let lower_a = 97;
 
 
     let file_contents = fs::read_to_string(FNAME)
     .expect("LogRocket: Should have been able to read the file");
 //println!("info.txt context =\n{file_contents}");
 for line in file_contents.lines() {
-    println!("{}", line);
-    let str_len = line.chars().count();
-    let part1_str = line.substring(0,str_len/2);
-    let part2_str = line.substring(str_len/2,strlen);
-    for i in 0..str_len/2 {
-        let match_loc = part2_str.find(part1_str[i]);
-        if match_loc >= 0 {
-            let match_char = part1_str[i];
+    println!("Current Line: {}", line);
+    let mut match_char:char = '9'; 
+    // 9 is not a match (null might be better)
+    let str_len:usize = line.chars().count();
+    if (str_len % 2 != 0) {
+        println!(" THIS GUY ISN'T AN EVEN LINE ");
+
+    }
+
+    let half_str_len = str_len / 2;
+    let part1_str = &line[..half_str_len];
+    let part2_str = &line[half_str_len..];
+    println!("Cut Line: {} ** {}", part1_str,part2_str);
+    // now that the line is cut in half - iterate across the first looking for a match on the second
+'outer_loop:    for i in 0..half_str_len {
+        let utf_char:u8 = part1_str.as_bytes()[i];
+        let char_char:char =utf_char as char; 
+        let match_loc = part2_str.find(char_char);
+        if match_loc != None {
+            match_char = char_char; // will need to unset this each line (or will it get unscoped?)
+            println!("matching on {}", match_char);
         }
+        let char_int = match_char as i64;
+        if (char_int >= lower_a) && (char_int <= lower_a+26) {
+            sum_prio = sum_prio + (char_int - lower_a +1); 
+            println!("match on {} for value of {}", match_char,char_int - lower_a + 1);
+            // is this wrong - we found a match so stop looking is "breaking bad" :)
+            println!("\n Total: {}", sum_prio);
+            break 'outer_loop;
+        }
+        else { 
+            if (char_int >= UPPER_A) && (char_int <= UPPER_A+26) {
+                sum_prio = sum_prio + (char_int - UPPER_A+27); 
+                println!("match on {} for value of {}", match_char,char_int - UPPER_A+27 );
+                println!("\n Total: {}", sum_prio);
+                break 'outer_loop;
+            }
+                
+        }
+
+            
+    
     }
 
     /*  // found a better way
@@ -50,6 +84,7 @@ for line in file_contents.lines() {
 //let tot = max2_num+max3_num+max_num;
 //println!("top 3 tot {}", tot);
 //println!("\n player2 score with part 2:  {}", player2_new_score);
+println!("\n Total: {}", sum_prio);
 println!("done");
 
 }
