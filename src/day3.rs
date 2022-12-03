@@ -10,7 +10,6 @@ pub fn day3 () {
     let UPPER_A = 65;
     let lower_a = 97;
 
-
     let file_contents = fs::read_to_string(FNAME)
     .expect("LogRocket: Should have been able to read the file");
 //println!("info.txt context =\n{file_contents}");
