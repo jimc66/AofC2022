@@ -7,8 +7,6 @@ pub fn day4 () {
 // const FNAME : &str = "./files/test4.txt" ;
 
 
-
-
 /* 
 Pretty much for all days - read in the file
  */    

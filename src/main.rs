@@ -15,5 +15,4 @@ mod day4; //filename by day
 
 fn main() {
     day4::day4();
-
 }
