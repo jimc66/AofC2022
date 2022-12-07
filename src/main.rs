@@ -9,10 +9,10 @@ this is how one rust newbie handles this   :)
 
 */
 
-mod day5; //filename by day
+mod day6; //filename by day
 
 // pub mod test2;
 
 fn main() {
-    day5::day5();
+    day6::day6();
 }
