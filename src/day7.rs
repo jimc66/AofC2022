@@ -123,13 +123,41 @@ pub fn day7 () {
          } 
          '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' => { // file logic
             println!("file flow {}",line);
+            let vec_str: Vec<&str> = line.split_whitespace().collect();
+            println!("part 0:{} part 1:{}", vec_str[0], vec_str[1]);
+            let file_size:u32 = vec_str[0].to_string().parse::<u32>().unwrap();
+            let just_file:String = vec_str[1].to_string();
+            let full_file:String = current_dir.clone() + &just_file;
+            println!("adding file :{} \n size:{}", full_file, file_size);
+            add_listing (&mut file_list2,  full_file, file_size );
+            
+            // now update the size of the current dir
+            println!("updating directory size for: {}", current_dir);
+            add_listing (&mut file_list2,  current_dir.to_string(), file_size );
+            println!("done with file update");
+            // we also need to walk UP the dir tree and add the new file size to all parent directories
+            //currdir - remove last char last / then rfind /, then chop to the /
+            let mut cur_last_slash_pos = current_dir.len();
+            let mut working_directory = current_dir.clone();
+            while cur_last_slash_pos > 1 {
+               let working_dir_sz = working_directory.len(); 
+               let working_dir_notrail:&str = &&working_directory[0..working_dir_sz-1]; // chop last char            
+               let new_last_pos = working_dir_notrail.rfind('/').unwrap(); // new last / - not including current
+               cur_last_slash_pos = new_last_pos;
+               println!("last / is at {:?}", new_last_pos);
+               let tmper:String = working_dir_notrail.to_string();
+               let temp_new_working = &tmper[0..new_last_pos]; 
+               working_directory = temp_new_working.to_string()+"/"; // chop it down
+               add_listing (&mut file_list2,  working_directory.to_string(), file_size );
+            }
+
+
          }
          _ => { // dir line logic if not a $ or num
             println!("dir flow {}",line);
 
          }
       }
-
 
     }
 
@@ -147,8 +175,31 @@ pub fn day7 () {
 
 
 
-    println!("let's see if this works so far");
-   
+println!("let's see if this works so far");
+
+// now we have all files and the dir lists the size of for all dirs and sub-dirs)
+// collect up the dirs: 
+/* iteratate (whole hashmap)
+    for the items that end in / 
+    that have a size <= 100000
+    add to total 
+*/
+   let mut total_size = 0; 
+   let max_size:u32 = 100000;
+   for (key, value) in &file_list2 {
+      println!("{} / {}", key, value);
+      let item_len = key.len();
+      let last_char = key.chars().nth(item_len-1).unwrap();
+      if last_char == '/' {
+         if value <= &max_size {
+            total_size = total_size+value;
+         }
+      }
+
+   //   map.remove(key);
+   }
+   println!("size answer: {}", total_size);
+ println!("done done")  
 
 }
 
