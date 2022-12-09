@@ -10,7 +10,6 @@ use std::collections::HashMap;
    list of file paths (as a vector - char with paths 
 push /
 push /fdssdf
-
 then track - current dir
 go with hashmap
 key is a directory or a file
@@ -24,28 +23,11 @@ key /ful/dir/path/filename
 
 value file size
 or do we want some type of structure
-directory
+directory convention is just a key with a trailing /
 
 then how to know the full size of dirs?
 /fddsf/dfsdfs/ so a key with a trailing / is a dir
 and the value is size
-
-
-
-)
-   strait up 
-   file path
-
-   Key  /dir path 
-   Value 
-
-
-   /
-   /fdjkdfs
-   /kfd;dfs/fddfskl
-
-   or
-
    
    */
 
@@ -63,7 +45,6 @@ pub fn day7 () {
     let mut current_dir:String = "/".to_string(); // keep track of where you are 
     let mut file_list2:HashMap<String, u32> = HashMap::new(); 
     
-
 //   let scratch:String = current_dir.to_owned()+&dir_to_add;
 //   let scratch2 = scratch.clone();
 //   let  key1:&str = &scratch2.to_owned();
