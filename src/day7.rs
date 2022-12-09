@@ -10,7 +10,6 @@ use std::collections::HashMap;
    list of file paths (as a vector - char with paths 
 push /
 push /fdssdf
-
 then track - current dir
 go with hashmap
 key is a directory or a file
@@ -24,28 +23,11 @@ key /ful/dir/path/filename
 
 value file size
 or do we want some type of structure
-directory
+directory convention is just a key with a trailing /
 
 then how to know the full size of dirs?
 /fddsf/dfsdfs/ so a key with a trailing / is a dir
 and the value is size
-
-
-
-)
-   strait up 
-   file path
-
-   Key  /dir path 
-   Value 
-
-
-   /
-   /fdjkdfs
-   /kfd;dfs/fddfskl
-
-   or
-
    
    */
 
@@ -54,15 +36,15 @@ pub fn day7 () {
  /*  
     Pretty much for all days - read in the file
     */    
-    //const FNAME : &str = "./files/day5.txt" ;
-    const FNAME : &str = "./files/test7.txt" ;
+    const FNAME : &str = "./files/day7.txt" ;
+    //const FNAME : &str = "./files/test7.txt" ;
 
     let file_contents = fs::read_to_string(FNAME)
     .expect("LogERROR: Should have been able to read the file");
 
     let mut current_dir:String = "/".to_string(); // keep track of where you are 
     let mut file_list2:HashMap<String, u32> = HashMap::new(); 
-
+    
 //   let scratch:String = current_dir.to_owned()+&dir_to_add;
 //   let scratch2 = scratch.clone();
 //   let  key1:&str = &scratch2.to_owned();
@@ -184,6 +166,16 @@ println!("let's see if this works so far");
     that have a size <= 100000
     add to total 
 */
+// part 2 as well is now mixed in
+   let total_disk:u32 = 70000000;
+   let free_space_target:u32 =30000000; // sticking with u32 since that's what we've already used
+   let used_space:&u32 = file_list2.get("/").unwrap();
+   let current_free = total_disk - used_space;
+   let free_up_target = free_space_target - current_free;
+   let mut delete_target_dir:String = String::new();
+   let overage:u32 =1;
+   let mut delete_target_space = used_space + &overage ; //start with a # higher than we could see in the list
+   // part 1 (and 2) values
    let mut total_size = 0; 
    let max_size:u32 = 100000;
    for (key, value) in &file_list2 {
@@ -191,14 +183,23 @@ println!("let's see if this works so far");
       let item_len = key.len();
       let last_char = key.chars().nth(item_len-1).unwrap();
       if last_char == '/' {
-         if value <= &max_size {
+         if value <= &max_size { //for part 1
             total_size = total_size+value;
+         }
+         // still if it's a dir, do part 2
+         if value >= &free_up_target { //it's big enough to work
+            if value < &delete_target_space { // it's better than what we have now
+               delete_target_dir = key.to_owned();
+               delete_target_space = *value;
+            }
+
          }
       }
 
    //   map.remove(key);
    }
-   println!("size answer: {}", total_size);
+   println!("size of all dirs less than 100K (part 1 answer): {}", total_size);
+   println!(" directory size to delete: {}", delete_target_space);
  println!("done done")  
 
 }
